@@ -1,0 +1,26 @@
+# To install packages in this file, run the below code:
+# pip install -r requirements.txt
+
+# Base ----------------------------------------
+matplotlib >= 3.5.2
+numpy >= 1.22.3
+opencv-python == 4.5.5.64
+PyYAML >= 6.0
+scipy >= 1.8.0
+torch == 1.11.0
+torchvision == 0.12.0
+tqdm >= 4.64.0
+
+# Web Api -------------
+requests >= 2.27.1
+
+# Images --------------
+Pillow >= 9.1.0
+imagehash
+
+# Logging -------------------------------------
+tensorboard == 2.9.0
+
+# Plotting ------------------------------------
+pandas >= 1.4.2
+seaborn >= 0.11.2
