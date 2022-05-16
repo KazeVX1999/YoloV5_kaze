@@ -11,7 +11,7 @@ from utils.torch_utils import select_device, time_sync
 
 
 @torch.no_grad()
-def DetectorActivate(cameraCode):
+def DetectorActivate():
     # System Configuration
     weights = "yolov5n.pt"
     imageSize = (480, 640)  # inference size (height, width)
@@ -54,14 +54,14 @@ def DetectorActivate(cameraCode):
     firstOn = True
     firstOff = True
     # Keep Looping after login Successfully
-    login = apiOperator.loginCamera(cameraCode)
+    login = apiOperator.loginCamera()
     while True:
         while login:
 
             # After 30 seconds update camera's setting
             if time.perf_counter() - apiOperator.loginTimer >= 30:
                 print("Camera 30seconds check up...")
-                login = apiOperator.loginCamera(cameraCode)
+                login = apiOperator.loginCamera()
 
             # If operator order it to offline, IoT will not run the detector and tells the operator it is offline.
 
@@ -180,7 +180,6 @@ def DetectorActivate(cameraCode):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    cameraCode = parser.add_argument('--cameraCode', default='', help='get your camera Code from CrowdSpot')
     apiOperator = ApiOperator()
     check_requirements(exclude=('tensorboard', 'thop'))
-    DetectorActivate(cameraCode)
+    DetectorActivate()
