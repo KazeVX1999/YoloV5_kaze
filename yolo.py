@@ -10,6 +10,7 @@ from utils.plots import Annotator, detectEnter, cropDetected, detectExit, enterC
 from utils.torch_utils import select_device, time_sync
 from PIL import Image
 
+
 @torch.no_grad()
 def DetectorActivate(cameraCode):
     # System Configuration
@@ -111,7 +112,8 @@ def DetectorActivate(cameraCode):
                     fps = int(fps)
 
                     # NMS
-                    pred = non_max_suppression(pred, conf_threshold, iou_threshold, classes, agnostic_nms, max_det=max_det)
+                    pred = non_max_suppression(pred, conf_threshold, iou_threshold, classes, agnostic_nms,
+                                               max_det=max_det)
                     dt[2] += time_sync() - t3
 
                     # Process predictions
@@ -120,8 +122,6 @@ def DetectorActivate(cameraCode):
                         p, imageOriginal, frame = path[i], im0s[i].copy(), dataset.count
 
                         s += f'{i}: '
-
-
 
                         # For Verify if Same Person. Frame without Mark, without Text.
                         imageCroppedForSave = imageOriginal.copy()
@@ -132,19 +132,18 @@ def DetectorActivate(cameraCode):
                         annotator = Annotator(imageOriginal, line_width=line_thickness)
 
                         # Create Marks by User
-                        annotator.mergeMarks(apiOperator.cameraEnterMarks, apiOperator.cameraExitMarks)
+                        if len(apiOperator.cameraCordsMarks) != 0:
+                            annotator.mergeMarks(apiOperator.cameraEnterMarks, apiOperator.cameraExitMarks)
 
                         # For Verify if entered or exited. Frame with Mark, without Text.
                         imageCroppedForVerify = imageOriginal.copy()
 
                         # Code adapted from phoenixNAP, 2019.
-                        cv2.putText(imageOriginal, "DateTime: " + str(datetime.datetime.now().strftime("Y%Y/M%m/D%d %I:%M:%S %p")) + " | FPS: " + str(fps), (10, 12),
+                        cv2.putText(imageOriginal, "DateTime: " + str(
+                            datetime.datetime.now().strftime("Y%Y/M%m/D%d %I:%M:%S %p")) + " | FPS: " + str(fps),
+                                    (10, 12),
                                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
                         # End of code adapted.
-
-
-
-
 
                         if len(det):
                             # Rescale boxes from img_size to im0 size
@@ -175,14 +174,14 @@ def DetectorActivate(cameraCode):
                             cv2.imshow(str(p), imageOriginal)
                             cv2.waitKey(1)  # 1 millisecond
 
-                        # Upload an image if stream is on
+                        # Upload image if stream is on
                         if apiOperator.camera["streamStatus"] == 1:
                             apiOperator.postStreamInput(imageOriginal)
 
 
 if __name__ == "__main__":
-     parser = argparse.ArgumentParser()
-     cameraCode =  parser.add_argument('--cameraCode', default='', help='get your camera Code from CrowdSpot')
-     apiOperator = ApiOperator()
-     check_requirements(exclude=('tensorboard', 'thop'))
-     DetectorActivate(cameraCode)
+    parser = argparse.ArgumentParser()
+    cameraCode = parser.add_argument('--cameraCode', default='', help='get your camera Code from CrowdSpot')
+    apiOperator = ApiOperator()
+    check_requirements(exclude=('tensorboard', 'thop'))
+    DetectorActivate(cameraCode)

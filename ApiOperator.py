@@ -87,8 +87,8 @@ class ApiOperator():
         if self.camera["cameraID"] is not None:
             response = requests.get(url=self.mainURL + "RetrieveMarks?cameraID=" + str(self.camera["cameraID"]),
                                     headers=self.jsonHeaders)
-            self.cameraCordsMarks = response.json()
-            if self.cameraCordsMarks != " - Please Add Marks -":
+            if response.status_code == 200:
+                self.cameraCordsMarks = response.json()
                 for i in range(0, len(self.cameraCordsMarks)):
                     if self.cameraCordsMarks[i]["markType"] == 1:
                         self.cameraEnterMarks.append(
@@ -104,6 +104,8 @@ class ApiOperator():
                                 [self.cameraCordsMarks[i]["cordXEnd"], self.cameraCordsMarks[i]["cordYEnd"]]
                             ]
                         )
+            else:
+                print("No marks Detected")
 
     def countPerson(self, status):
         statusC = ""
