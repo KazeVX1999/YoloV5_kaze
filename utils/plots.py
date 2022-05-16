@@ -184,39 +184,8 @@ def exitCheck(xyxy, im):
 
     return result
 
-def detectEnter(xyxy, im):
-    # Take in Marked Image
-    crop = cropDetected(xyxy, im)
 
-    # Code Adapted from Kinght 金, 2017.
-    lowerHSVEnter = (62, 215, 180)
-    upperHSVEnter = (64, 219, 182)
-
-    hsv = cv2.cvtColor(crop, cv2.COLOR_BGR2HSV)
-    thresh = cv2.inRange(hsv, lowerHSVEnter, upperHSVEnter)
-    count = np.sum(np.nonzero(thresh))
-    # End of Code Adapted
-
-    # Count == 0 means no green detected
-    return count
-
-
-def detectExit(xyxy, im):
-    # Take in Marked Image
-    crop = cropDetected(xyxy, im)
-
-    lowerHSVExit = (0, 238, 232)
-    upperHSVExit = (1, 238, 233)
-
-    hsv = cv2.cvtColor(crop, cv2.COLOR_BGR2HSV)
-    thresh = cv2.inRange(hsv, lowerHSVExit, upperHSVExit)
-    count = np.sum(np.nonzero(thresh))
-
-    # Count == 0 means no red detected
-    return count
-
-
-def cropDetected(xyxy, im, gain=1.02, pad=10, square=False):
+def cropDetected(xyxy, im, im2, gain=1.02, pad=10, square=False):
     # Save image crop as {file} with crop size multiple {gain} and {pad} pixels. Save and/or return crop
     xyxy = torch.tensor(xyxy).view(-1, 4)
     b = xyxy2xywh(xyxy)  # boxes
@@ -226,7 +195,27 @@ def cropDetected(xyxy, im, gain=1.02, pad=10, square=False):
     xyxy = xywh2xyxy(b).long()
     clip_coords(xyxy, im.shape)
     crop = im[int(xyxy[0, 1]):int(xyxy[0, 3]), int(xyxy[0, 0]):int(xyxy[0, 2]), ::1]
-    return crop
+    crop2 = crop.copy()
+
+    # Code Adapted from Kinght 金, 2017.
+    # Detect Enter Color
+    thresh1 = cv2.inRange(cv2.cvtColor(crop, cv2.COLOR_BGR2HSV), (62, 215, 180), (64, 219, 182))
+    enteredCount = np.sum(np.nonzero(thresh1))
+    # End of Code Adapted
+
+    # Detect Exit Color
+    thresh2 = cv2.inRange(cv2.cvtColor(crop2, cv2.COLOR_BGR2HSV), (0, 238, 232), (1, 238, 233))
+    exitedCount = np.sum(np.nonzero(thresh2))
+
+    print(f"Enter PX: {enteredCount} | Exit PX: {exitedCount}")
+    if enteredCount > exitedCount:
+        print("Entered")
+        enterCheck(xyxy, im2)
+    elif exitedCount > enteredCount:
+        print("Exited")
+        exitCheck(xyxy, im2)
+    else:
+        pass
 
 
 def feature_visualization(x, module_type, stage, n=32, save_dir=Path('runs/detect/exp')):

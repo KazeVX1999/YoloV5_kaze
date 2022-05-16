@@ -164,17 +164,7 @@ def DetectorActivate(cameraCode):
                                 if view_img:
                                     annotator.box_label(xyxy)
 
-                                if detectEnter(xyxy, imageCroppedForVerify) > detectExit(xyxy, imageCroppedForVerify):
-                                    print("enter")
-                                    if enterCheck(xyxy, imageCroppedForSave):
-                                        apiOperator.countPerson(True)
-                                elif detectEnter(xyxy, imageCroppedForVerify) < detectExit(xyxy, imageCroppedForVerify):
-                                    print("exit")
-                                    if exitCheck(xyxy, imageCroppedForSave):
-                                        apiOperator.countPerson(False)
-                                else:
-                                    pass
-
+                                cropDetected(xyxy, im=imageCroppedForVerify, im2=imageCroppedForSave)
 
                         # Print time (inference-only)
                         LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s) | FPS: {fps}')
