@@ -33,8 +33,8 @@ class ApiOperator():
                 "- No camera code detected. Please put the camera code in the cameraFile.txt \"second line\" then please restart the IoT -")
             return False
         print("- Camera Code Read -")
-        print("Code: " + self.cameraCode)
-        response = requests.get(self.mainURL + "LoginCamera?cameraCode=" + self.cameraCode,
+        print("Code: " + str(self.cameraCode))
+        response = requests.get(self.mainURL + "LoginCamera?cameraCode=" + str(self.cameraCode),
                                 headers=self.jsonHeaders)
         if response.status_code == 200:
             self.camera = json.loads(response.content.decode('utf-8'))
