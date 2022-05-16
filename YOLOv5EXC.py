@@ -1,4 +1,5 @@
 # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
+import argparse
 import datetime, threading, os, time, cv2, torch, torch.backends.cudnn as cudnn
 from ApiOperator import ApiOperator
 from models.common import DetectMultiBackend
@@ -10,7 +11,7 @@ from utils.torch_utils import select_device, time_sync
 from PIL import Image
 
 @torch.no_grad()
-def DetectorActivate():
+def DetectorActivate(cameraCode):
     # System Configuration
     weights = "yolov5n.pt"
     imageSize = (480, 640)  # inference size (height, width)
@@ -53,14 +54,14 @@ def DetectorActivate():
     firstOn = True
     firstOff = True
     # Keep Looping after login Successfully
-    login = apiOperator.loginCamera()
+    login = apiOperator.loginCamera(cameraCode)
     while True:
         while login:
 
             # After 30 seconds update camera's setting
             if time.perf_counter() - apiOperator.loginTimer >= 30:
                 print("Camera 30seconds check up...")
-                login = apiOperator.loginCamera()
+                login = apiOperator.loginCamera(cameraCode)
 
             # If operator order it to offline, IoT will not run the detector and tells the operator it is offline.
 
@@ -190,6 +191,8 @@ def DetectorActivate():
 
 
 if __name__ == "__main__":
+     parser = argparse.ArgumentParser()
+     cameraCode =  parser.add_argument('--cameraCode', default='', help='get your camera Code from CrowdSpot')
      apiOperator = ApiOperator()
      check_requirements(exclude=('tensorboard', 'thop'))
-     DetectorActivate()
+     DetectorActivate(cameraCode)

@@ -3,7 +3,7 @@ import urllib.request
 from PIL import Image
 
 
-class ApiOperator:
+class ApiOperator():
     def __init__(self):
         # Code adapted from K. Brian, 2019.
         self.mainURL = "http://localhost:64229/API/"
@@ -26,22 +26,14 @@ class ApiOperator:
         self.cameraEnterMarks = []
         self.cameraExitMarks = []
 
-        # Code adapted from PythonTutorial, n.d.
-        with open("cameraFile.txt", "r") as file:
-            lines = file.readlines()
-            self.cameraCode = lines[1]
-
-            if self.cameraCode == "" or self.cameraCode == "\n":
-                print(
-                    "- No camera code detected. Please put the camera code in the cameraFile.txt \"second line\" then please restart the IoT -")
-            else:
-                print("- Camera Code Read -")
-                print("Code: " + self.cameraCode)
-        # End of code adapted.
-
-    def loginCamera(self):
+    def loginCamera(self, cameraCode):
+        self.cameraCode = cameraCode
         if self.cameraCode == "" or self.cameraCode == "\n":
+            print(
+                "- No camera code detected. Please put the camera code in the cameraFile.txt \"second line\" then please restart the IoT -")
             return False
+        print("- Camera Code Read -")
+        print("Code: " + self.cameraCode)
         response = requests.get(self.mainURL + "LoginCamera?cameraCode=" + self.cameraCode,
                                 headers=self.jsonHeaders)
         if response.status_code == 200:
