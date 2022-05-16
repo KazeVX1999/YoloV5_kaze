@@ -1,14 +1,13 @@
 # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
 import argparse
-import datetime, threading, os, time, cv2, torch, torch.backends.cudnn as cudnn
+import datetime, threading, time, cv2, torch, torch.backends.cudnn as cudnn
 from ApiOperator import ApiOperator
 from models.common import DetectMultiBackend
 from utils.datasets import LoadStreams
 from utils.general import (LOGGER, check_img_size, check_imshow, check_requirements,
                            non_max_suppression, scale_coords)
-from utils.plots import Annotator, detectEnter, cropDetected, detectExit, enterCheck, exitCheck
+from utils.plots import Annotator, cropDetected
 from utils.torch_utils import select_device, time_sync
-from PIL import Image
 
 
 @torch.no_grad()
