@@ -96,21 +96,22 @@ class ApiOperator:
             response = requests.get(url=self.mainURL + "RetrieveMarks?cameraID=" + str(self.camera["cameraID"]),
                                     headers=self.jsonHeaders)
             self.cameraCordsMarks = response.json()
-            for i in range(0, len(self.cameraCordsMarks)):
-                if self.cameraCordsMarks[i]["markType"] == 1:
-                    self.cameraEnterMarks.append(
-                        [
-                            [self.cameraCordsMarks[i]["cordXStart"], self.cameraCordsMarks[i]["cordYStart"]],
-                            [self.cameraCordsMarks[i]["cordXEnd"], self.cameraCordsMarks[i]["cordYEnd"]]
-                        ]
-                    )
-                else:
-                    self.cameraExitMarks.append(
-                        [
-                            [self.cameraCordsMarks[i]["cordXStart"], self.cameraCordsMarks[i]["cordYStart"]],
-                            [self.cameraCordsMarks[i]["cordXEnd"], self.cameraCordsMarks[i]["cordYEnd"]]
-                        ]
-                    )
+            if self.cameraCordsMarks != " - Please Add Marks -":
+                for i in range(0, len(self.cameraCordsMarks)):
+                    if self.cameraCordsMarks[i]["markType"] == 1:
+                        self.cameraEnterMarks.append(
+                            [
+                                [self.cameraCordsMarks[i]["cordXStart"], self.cameraCordsMarks[i]["cordYStart"]],
+                                [self.cameraCordsMarks[i]["cordXEnd"], self.cameraCordsMarks[i]["cordYEnd"]]
+                            ]
+                        )
+                    else:
+                        self.cameraExitMarks.append(
+                            [
+                                [self.cameraCordsMarks[i]["cordXStart"], self.cameraCordsMarks[i]["cordYStart"]],
+                                [self.cameraCordsMarks[i]["cordXEnd"], self.cameraCordsMarks[i]["cordYEnd"]]
+                            ]
+                        )
 
     def countPerson(self, status):
         statusC = ""

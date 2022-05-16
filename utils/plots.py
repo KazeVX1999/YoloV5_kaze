@@ -189,8 +189,8 @@ def detectEnter(xyxy, im):
     crop = cropDetected(xyxy, im)
 
     # Code Adapted from Kinght 金, 2017.
-    lowerHSVEnter = (62, 213, 180)
-    upperHSVEnter = (64, 220, 184)
+    lowerHSVEnter = (62, 215, 180)
+    upperHSVEnter = (64, 219, 182)
 
     hsv = cv2.cvtColor(crop, cv2.COLOR_BGR2HSV)
     thresh = cv2.inRange(hsv, lowerHSVEnter, upperHSVEnter)
@@ -205,7 +205,7 @@ def detectExit(xyxy, im):
     # Take in Marked Image
     crop = cropDetected(xyxy, im)
 
-    lowerHSVExit = (0, 234, 232)
+    lowerHSVExit = (0, 238, 232)
     upperHSVExit = (1, 238, 233)
 
     hsv = cv2.cvtColor(crop, cv2.COLOR_BGR2HSV)
