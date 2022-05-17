@@ -6,7 +6,7 @@ from PIL import Image
 class ApiOperator():
     def __init__(self):
         # Code adapted from K. Brian, 2019.
-        self.mainURL = "http://localhost:64229/API/"
+        self.mainURL = "https://crowdspotwebapi.1919280.win.studentwebserver.co.uk/CrowdSpotWebAPI/API/"
         self.jsonHeaders = {'Content-Type': 'application/json'}
         # End of code adapted.
 

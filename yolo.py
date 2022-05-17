@@ -53,9 +53,10 @@ def DetectorActivate():
 
     firstOn = True
     firstOff = True
-    # Keep Looping after login Successfully
-    login = apiOperator.loginCamera()
+
     while True:
+        # Keep Looping after login Successfully
+        login = apiOperator.loginCamera()
         while login:
 
             # After 30 seconds update camera's setting
@@ -179,7 +180,6 @@ def DetectorActivate():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
     apiOperator = ApiOperator()
     check_requirements(exclude=('tensorboard', 'thop'))
     DetectorActivate()
