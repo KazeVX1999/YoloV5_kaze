@@ -89,10 +89,11 @@ def DetectorActivate():
                 for path, im, im0s, vid_cap, s in dataset:
 
                     # After 30 seconds update camera's setting
-                    if time.perf_counter() - apiOperator.loginTimer >= 10:
+                    if time.perf_counter() - apiOperator.loginTimer >= 30:
                         print("Camera 30seconds check up...")
                         login = apiOperator.loginCamera()
-                        break
+                        if not login or apiOperator.camera["operationStatus"] != 1:
+                            break
 
                     t1 = time_sync()
                     im = torch.from_numpy(im).to(device)
@@ -163,7 +164,11 @@ def DetectorActivate():
                                 if view_img:
                                     annotator.box_label(xyxy)
 
-                                cropDetected(xyxy, im=imageCroppedForVerify, im2=imageCroppedForSave)
+                                countResult = cropDetected(xyxy, im=imageCroppedForVerify, im2=imageCroppedForSave)
+                                if countResult == 0:
+                                    apiOperator.countPerson(True)
+                                elif countResult == 1:
+                                    apiOperator.countPerson(False)
 
                         # Print time (inference-only)
                         LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s) | FPS: {fps}')

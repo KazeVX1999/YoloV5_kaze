@@ -43,7 +43,6 @@ class ApiOperator():
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         response = requests.get(self.mainURL + "LoginCamera?cameraCode=" + self.cameraCode,
                                 headers=self.jsonHeaders, verify=False)
-        print(response.status_code)
         if response.status_code == 200:
             self.camera = json.loads(response.content.decode('utf-8'))
             if self.firstLogin:
@@ -63,7 +62,7 @@ class ApiOperator():
                 inputN = 1
             else:
                 inputN = 0
-            response = requests.put(
+            response = requests.get(
                 self.mainURL + "ToggleCameraOperating?cameraID=" + str(self.camera["cameraID"]) + "&status=" + str(
                     inputN),
                 headers=self.jsonHeaders, verify=False)
