@@ -59,7 +59,6 @@ def compareImage(img1, img2):
     image2 = imagehash.average_hash(Image.open(img2))
 
     threshold = 25
-    print(image1 - image2)
     if image1 - image2 < threshold:
         # Images are similar
         return True
