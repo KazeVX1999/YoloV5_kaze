@@ -154,7 +154,7 @@ def exitCheck(crop):
                     filesEntered = os.listdir(folderName2)
 
                     # Compare exited person with other people entered image. If empty skip
-                    if (filesEntered) != 0:
+                    if filesEntered != 0:
                         for fileE in filesEntered:
                             # People are  the same = Means that person has entered before therefore delete this entered person
                             # So if that person enters again, he will be counted as entered
