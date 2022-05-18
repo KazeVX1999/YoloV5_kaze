@@ -2,6 +2,7 @@ import time, cv2, pandas, requests, json, numpy as np
 import urllib.request
 from PIL import Image
 
+import urllib3
 
 class ApiOperator():
     def __init__(self):
@@ -39,6 +40,7 @@ class ApiOperator():
         # End of code adapted.
 
     def loginCamera(self):
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         response = requests.get(self.mainURL + "LoginCamera?cameraCode=" + self.cameraCode,
                                 headers=self.jsonHeaders, verify=False)
         if response.status_code == 200:
@@ -63,8 +65,7 @@ class ApiOperator():
             response = requests.put(
                 self.mainURL + "ToggleCameraOperating?cameraID=" + str(self.camera["cameraID"]) + "&status=" + str(
                     inputN),
-                headers=self.jsonHeaderasds, verify=False)
-            print("\n" + str(json.loads(response.content.decode('utf-8'))))
+                headers=self.jsonHeaders, verify=False)
 
     def postStreamInput(self, image):
         if self.camera["cameraID"] is not None:
