@@ -1,6 +1,6 @@
 # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
 import argparse
-import datetime, threading, time, cv2, torch, torch.backends.cudnn as cudnn
+import datetime, threading, os, time, cv2, torch, torch.backends.cudnn as cudnn
 from ApiOperator import ApiOperator
 from models.common import DetectMultiBackend
 from utils.datasets import LoadStreams
@@ -183,8 +183,18 @@ def DetectorActivate():
                         if apiOperator.camera["streamStatus"] == 1:
                             apiOperator.postStreamInput(imageOriginal)
 
+def createNecessaryPath():
+    if not os.path.exists("runs"):
+        os.makedirs("runs")
+
+    if not os.path.exists("runs/entered"):
+        os.makedirs("runs/entered")
+
+    if not os.path.exists("runs/exited"):
+        os.makedirs("runs/exited")
 
 if __name__ == "__main__":
+    createNecessaryPath()
     apiOperator = ApiOperator()
     check_requirements(exclude=('tensorboard', 'thop'))
     DetectorActivate()
