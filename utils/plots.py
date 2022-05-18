@@ -83,23 +83,6 @@ def enterCheck(crop):
                     fileName = folderName + "/" + str(now) + "enterDetected.jpeg"
                     cv2.imwrite(fileName, crop)
                     print("New Person Entered Saved")
-
-                    folderName2 = "runs/exited"
-                    filesExited = os.listdir(folderName2)
-
-                    # Compare people from exit, if there's no images from the folder, simply skip it
-                    if len(filesExited) != 0:
-                        for fileX in filesExited:
-                            # People are  the same = Means that person has been exited before therefore delete exited
-                            # person should happen. So if that person exit again, he can be counted as exited the next time when he
-                            # reached the exit again
-                            if compareImage(crop, f"{folderName2}/{str(fileX)}"):
-                                try:
-                                    # Same person, delete his/her image
-                                    os.remove(f"{folderName2}/{str(fileX)}")
-                                    print("Deleted entered people from Exit Folder")
-                                except:
-                                    print("Delete people from Exit Folder Failed")
                     result = True
                 except:
                     print("Add New Person entered failed")
@@ -112,26 +95,27 @@ def enterCheck(crop):
             fileName = folderName + "/" + str(now) + "enterDetected.jpeg"
             cv2.imwrite(fileName, crop)
             print("New Person Entered Saved")
-
-            folderName2 = "runs/exited"
-            filesExited = os.listdir(folderName2)
-
-            if len(filesExited) != 0:
-                for fileX in filesExited:
-                    # People are  the same = Means that person has been exited before therefore delete exited person should happen
-                    # So if that person exit again, he can be counted as exited when he reached the exit
-                    if compareImage(crop, f"{folderName2}/{str(fileX)}"):
-                        try:
-                            os.remove(f"{folderName2}/{str(fileX)}")
-                            print("Deleted entered people from Exit Folder")
-                        except:
-                            print("Delete people from Exit Folder Failed")
-                    else:
-                        pass
             result = True
         except:
             print("Add New Person entered failed")
+
+    folderName2 = "runs/exited"
+    filesExited = os.listdir(folderName2)
+    # Compare people from exit, if there's no images from the folder, simply skip it
+    if len(filesExited) != 0:
+        for fileX in filesExited:
+        # People are  the same = Means that person has been exited before therefore delete exited
+            # person should happen. So if that person exit again, he can be counted as exited the next time when he
+            # reached the exit again
+            if compareImage(crop, f"{folderName2}/{str(fileX)}"):
+                 try:
+                    # Same person, delete his/her image
+                    os.remove(f"{folderName2}/{str(fileX)}")
+                    print("Deleted entered people from Exit Folder")
+                 except:
+                    print("Delete people from Exit Folder Failed")
     return result
+
 
 
 def exitCheck(crop):
@@ -148,21 +132,6 @@ def exitCheck(crop):
                     now = datetime.now().strftime("%H%M%S")
                     fileName = folderName + "/" + str(now) + "exitDetected.jpeg"
                     cv2.imwrite(fileName, crop)
-
-                    folderName2 = "runs/entered"
-                    filesEntered = os.listdir(folderName2)
-
-                    # Compare exited person with other people entered image. If empty skip
-                    if filesEntered != 0:
-                        for fileE in filesEntered:
-                            # People are  the same = Means that person has entered before therefore delete this entered person
-                            # So if that person enters again, he will be counted as entered
-                            if compareImage(crop, f"{folderName2}/{str(fileE)}"):
-                                try:
-                                    os.remove(f"{folderName2}/{str(fileE)}")
-                                    print("Delete people from Entered Folder Failed")
-                                except:
-                                    print("Delete people from Entered Folder Failed")
                     result = True
                 except:
                     print("Add New Person exited failed")
@@ -173,25 +142,23 @@ def exitCheck(crop):
             now = datetime.now().strftime("%H%M%S")
             fileName = folderName + "/" + str(now) + "exitDetected.jpeg"
             cv2.imwrite(fileName, crop)
-
-            folderName2 = "runs/entered"
-            filesEntered = os.listdir(folderName2)
-
-            if len(filesEntered) != 0:
-                for fileE in filesEntered:
-                    # People are  the same = Means that person has entered before therefore delete this entered person
-                    # So if that person enters again, he will be counted as entered
-                    if compareImage(crop, f"{filesEntered}/{str(fileE)}"):
-                        try:
-                            os.remove(f"{filesEntered}/{str(fileE)}")
-                            print("Delete people from Entered Folder Failed")
-                        except:
-                            print("Delete people from Entered Folder Failed")
-
             result = True
         except:
             print("Add New Person exited failed")
 
+    folderName2 = "runs/entered"
+    filesEntered = os.listdir(folderName2)
+
+    if len(filesEntered) != 0:
+        for fileE in filesEntered:
+            # People are  the same = Means that person has entered before therefore delete this entered person
+            # So if that person enters again, he will be counted as entered
+            if compareImage(crop, f"{folderName2}/{str(fileE)}"):
+                try:
+                    os.remove(f"{folderName2}/{str(fileE)}")
+                    print("Delete people from Entered Folder Failed")
+                except:
+                    print("Delete people from Entered Folder Failed")
     return result
 
 
