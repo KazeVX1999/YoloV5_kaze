@@ -42,7 +42,7 @@ class ApiOperator():
     def loginCamera(self):
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         response = requests.get(self.mainURL + "LoginCamera?cameraCode=" + self.cameraCode,
-                                headers=self.jsonHeaders, verify=False)
+                                headers=self.jsonHeaders)
         if response.status_code == 200:
             self.camera = json.loads(response.content.decode('utf-8'))
             if self.firstLogin:
@@ -65,7 +65,7 @@ class ApiOperator():
             response = requests.get(
                 self.mainURL + "ToggleCameraOperating?cameraID=" + str(self.camera["cameraID"]) + "&status=" + str(
                     inputN),
-                headers=self.jsonHeaders, verify=False)
+                headers=self.jsonHeaders)
 
     def postStreamInput(self, image):
         if self.camera["cameraID"] is not None:
@@ -81,7 +81,7 @@ class ApiOperator():
             files = {"theImage": open("tempStreamImage.jpeg", "rb")}
 
             response = requests.post(url=self.mainURL + "PostStreamInput?cameraID=" + str(self.camera["cameraID"]),
-                                     files=files, verify=False)
+                                     files=files)
             # End of Code Adapted.
 
             if response.status_code == 200:
@@ -92,7 +92,7 @@ class ApiOperator():
     def extractMarks(self):
         if self.camera["cameraID"] is not None:
             response = requests.get(url=self.mainURL + "RetrieveMarks?cameraID=" + str(self.camera["cameraID"]),
-                                    headers=self.jsonHeaders, verify=False)
+                                    headers=self.jsonHeaders)
             if response.status_code == 200:
                 self.cameraCordsMarks = response.json()
                 for i in range(0, len(self.cameraCordsMarks)):
@@ -120,7 +120,7 @@ class ApiOperator():
             statusC = "false"
         response = requests.post(url=self.mainURL + "CameraUpdateRecordOfLocation?cameraID=" + str(
             self.camera["cameraID"]) + "&count=" + statusC,
-                                 headers=self.jsonHeaders, verify=False)
+                                 headers=self.jsonHeaders)
         if response.status_code == 200:
             if status:
                 print("Person Count +1")
