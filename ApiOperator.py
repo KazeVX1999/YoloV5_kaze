@@ -30,7 +30,7 @@ class ApiOperator():
         # Code adapted from PythonTutorial, n.d.
         with open("cameraFile.txt", "r") as file:
             lines = file.readlines()
-            self.cameraCode = lines[1]
+            self.cameraCode = lines[1].strip()
             if self.cameraCode == "" or self.cameraCode == "\n":
                 print(
                     "- No camera code detected. Please put the camera code in the cameraFile.txt \"second line\" then please restart the IoT -")
@@ -43,6 +43,7 @@ class ApiOperator():
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         response = requests.get(self.mainURL + "LoginCamera?cameraCode=" + self.cameraCode,
                                 headers=self.jsonHeaders, verify=False)
+        print(response.status_code)
         if response.status_code == 200:
             self.camera = json.loads(response.content.decode('utf-8'))
             if self.firstLogin:
@@ -114,7 +115,6 @@ class ApiOperator():
                 print("No marks Detected")
 
     def countPerson(self, status):
-        statusC = ""
         if status:
             statusC = "true"
         else:
