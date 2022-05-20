@@ -19,7 +19,7 @@ def DetectorActivate():
     iou_threshold = 0.5  # NMS IOU threshold
     max_det = 1000  # maximum detections per image
     device = "cpu"  # cuda device, i.e. 0 or 0,1,2,3 or cpu
-    classes = None  # filter by class: --class 0, or --class 0 2 3
+    classes = 0  # filter by class: --class 0, or --class 0 2 3
     agnostic_nms = False  # class-agnostic NMS
     augment = False  # augmented inference
     visualize = False  # visualize features
